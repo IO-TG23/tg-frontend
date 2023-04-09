@@ -9,6 +9,7 @@ import Privacy from "./components/pages/Privacy";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Logout from "./components/pages/Logout";
+import ResetPassword from "./components/pages/ResetPassword";
 
 const theme = createTheme({
   palette: {
@@ -43,6 +44,7 @@ function App() {
             <Route path="/login" Component={Login} />
             <Route path="/register" Component={Register} />
             <Route path="/logout" Component={Logout} />
+            <Route path="/resetpassword" Component={ResetPassword} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>

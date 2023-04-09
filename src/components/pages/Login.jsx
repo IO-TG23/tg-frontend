@@ -119,6 +119,17 @@ function Login() {
           >
             Nie posiadasz konta? Zarejestruj się
           </MuiLink>
+          <br />
+          <MuiLink
+            typography={"subtitle2"}
+            onClick={() => {
+              navigate({
+                pathname: "/resetpassword",
+              });
+            }}
+          >
+            Nie pamiętam hasła
+          </MuiLink>
         </Grid>
         <Grid item xs={12}>
           <Button
