@@ -7,6 +7,7 @@ import {
   MdAppRegistration,
   MdPerson,
   MdHome,
+  MdDirectionsCar,
   MdPrivacyTip,
 } from "react-icons/md";
 
@@ -41,6 +42,11 @@ const menuItemsOther = [
     href: "/",
   },
   {
+    icon: <MdDirectionsCar style={{ marginRight: 7 }} />,
+    text: "Oferty",
+    href: "/offerlist",
+  },
+  {
     icon: <MdPerson style={{ marginRight: 7 }} />,
     text: "O nas",
     href: "/about",
@@ -72,13 +78,13 @@ function DrawerMenu({ open, setOpen }) {
             <Divider />
           </>
         ) : (
-          <>
-            {menuItemsLoggedOut.map((i) => (
-              <DrawerOption key={i.text} {...i} />
-            ))}
-            <Divider />
-          </>
-        )}
+            <>
+              {menuItemsLoggedOut.map((i) => (
+                <DrawerOption key={i.text} {...i} />
+              ))}
+              <Divider />
+            </>
+          )}
         {menuItemsOther.map((i) => (
           <DrawerOption key={i.text} {...i} />
         ))}
