@@ -1,13 +1,18 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { AppBar, Toolbar, IconButton, Typography, Badge } from "@mui/material";
 import { MdAccountCircle } from "react-icons/md";
 import AccountMenu from "./common/AccountMenu";
 import logo from "../assets/logo.jpg";
 import DrawerMenu from "./common/DrawerMenu";
+import { AppContext } from "../App";
 
 function Header() {
-  const [openAccountMenu, setOpenAccountMenu] = useState(false);
-  const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
+  const {
+    state: { openAccountMenu, setOpenAccountMenu },
+  } = useContext(AppContext);
+  const {
+    state: { openDrawerMenu, setOpenDrawerMenu },
+  } = useContext(AppContext);
 
   const accountMenuRef = useRef();
 

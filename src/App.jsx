@@ -19,6 +19,15 @@ const theme = createTheme({
       main: "#80301c",
     },
   },
+  components: {
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          cursor: "pointer",
+        },
+      },
+    },
+  },
 });
 
 const initialAccountState = {
@@ -26,34 +35,49 @@ const initialAccountState = {
 };
 
 export const AccountContext = createContext(null);
+export const AppContext = createContext(null);
 
 function App() {
   const [manageAccountState, setManageAccountState] = useState({
     ...initialAccountState,
   });
 
-  return (
-    <AccountContext.Provider
-      value={{ state: manageAccountState, setManageAccountState }}
-    >
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Header />
-          <Routes>
-            <Route path="/" Component={Home} />
-            <Route path="/offerlist" Component={OfferList} />
-            <Route path="/about" Component={About} />
-            <Route path="/privacy" Component={Privacy} />
-            <Route path="/login" Component={Login} />
-            <Route path="/register" Component={Register} />
-            <Route path="/logout" Component={Logout} />
-            <Route path="/resetpassword" Component={ResetPassword} />
+  const [openDrawerMenu, setOpenDrawerMenu] = useState(false);
+  const [openAccountMenu, setOpenAccountMenu] = useState(false);
 
-            <Route path="/offer/:id" Component={Offer} />
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
-    </AccountContext.Provider>
+  return (
+    <AppContext.Provider
+      value={{
+        state: {
+          openDrawerMenu,
+          setOpenDrawerMenu,
+          openAccountMenu,
+          setOpenAccountMenu,
+        },
+      }}
+    >
+      <AccountContext.Provider
+        value={{ state: manageAccountState, setManageAccountState }}
+      >
+        <ThemeProvider theme={theme}>
+          <BrowserRouter>
+            <Header />
+            <Routes>
+              <Route path="/" Component={Home} />
+              <Route path="/offerlist" Component={OfferList} />
+              <Route path="/about" Component={About} />
+              <Route path="/privacy" Component={Privacy} />
+              <Route path="/login" Component={Login} />
+              <Route path="/register" Component={Register} />
+              <Route path="/logout" Component={Logout} />
+              <Route path="/resetpassword" Component={ResetPassword} />
+
+              <Route path="/offer/:id" Component={Offer} />
+            </Routes>
+          </BrowserRouter>
+        </ThemeProvider>
+      </AccountContext.Provider>
+    </AppContext.Provider>
   );
 }
 
