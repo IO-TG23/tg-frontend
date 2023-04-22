@@ -6,11 +6,13 @@ import {
   Typography,
   Link as MuiLink,
   Button,
-  Alert,
+  Alert
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAppRegistration } from "react-icons/md";
 import axios from "axios";
+
+import AppModal from "../common/AppModal";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -20,6 +22,8 @@ function Register() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertVariant, setAlertVariant] = useState("success");
   const [alertMsg, setAlertMsg] = useState("Użytkownik zarejestrowany");
+  const [openModal, setOpenModal] = useState(false);
+  const [qrCode, setQrCode] = useState("");
 
   const navigate = useNavigate();
 
@@ -49,22 +53,31 @@ function Register() {
         }
       );
 
-      setShowAlert(true);
-
-      setTimeout(() => {
-        navigate({
-          pathname: "/login",
-        });
-      }, 1000);
+      if (request.status === 200) {
+        setShowAlert(true);
+        setOpenModal(true);
+        setQrCode(request.data.message);
+      }
     } catch (err) {
       setAlertVariant("error");
-      setAlertMsg(JSON.stringify(err.response.data.messages));
+      setAlertMsg(JSON.stringify(err.response.data.errorMessage));
       setShowAlert(true);
     }
   };
 
+  const handleModalClose = () => {
+    setOpenModal(false);
+
+    setTimeout(() => {
+      navigate({
+        pathname: "/login",
+      });
+    }, 1000);
+  };
+
   return (
     <MainContent>
+      <AppModal contentMain={<img src={qrCode} />} contentOptional={"Nie zapomnij odwiedzić swojego maila w celu potwierdzenia konta"} handleModalClose={handleModalClose} openModal={openModal} title={"Zarejestruj się"} />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Alert
@@ -83,7 +96,7 @@ function Register() {
             Zarejestruj się
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             label="Email"
             type="email"
@@ -95,7 +108,7 @@ function Register() {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             label="Hasło"
             type="password"
@@ -107,7 +120,7 @@ function Register() {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             label="Potwierdź hasło"
             type="password"

@@ -10,8 +10,10 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AccountContext } from "../../App";
-import { MdOutlineLogin } from "react-icons/md";
+import { MdLockOpen, MdOutlineLogin } from "react-icons/md";
 import axios from "axios";
+
+import AppModal from "../common/AppModal";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -20,6 +22,8 @@ function Login() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertVariant, setAlertVariant] = useState("success");
   const [alertMsg, setAlertMsg] = useState("Użytkownik zalogowany");
+  const [openModal, setOpenModal] = useState(false);
+  const [code, setCode] = useState(0);
 
   const navigate = useNavigate();
   const { setManageAccountState } = useContext(AccountContext);
@@ -32,13 +36,18 @@ function Login() {
     }
   }, [email, password]);
 
-  const handleClick = async () => {
+  const handleClick = () => {
+    setOpenModal(true);
+  };
+
+  const handleModalClick = async () => {
     try {
       const request = await axios.post(
         `${import.meta.env.REACT_APP_BACKEND_URL}/auth/login`,
         {
           email,
           password,
+          code : code.toString()
         }
       );
       localStorage.setItem("token", request.data.message);
@@ -52,7 +61,6 @@ function Login() {
           pathname: "/",
         });
       }, 1000);
-      
     } catch (err) {
       localStorage.removeItem("token");
       setManageAccountState({
@@ -66,6 +74,37 @@ function Login() {
 
   return (
     <MainContent>
+      <AppModal
+        openModal={openModal}
+        handleModalClose={() => {
+          setOpenModal(false);
+        }}
+        contentMain={
+          <>
+            <TextField
+              type="number"
+              color="primary"
+              label="Kod logowania"
+              onChange={(e) => {
+                setCode(parseInt(e.target.value));
+              }}
+              placeholder="Kod logowania"
+            />
+          </>
+        }
+        contentOptional={
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<MdLockOpen />}
+            disabled={notFilled}
+            onClick={handleModalClick}
+          >
+            Zaloguj się
+          </Button>
+        }
+        title={"Podaj kod logowania"}
+      />
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Alert
@@ -84,7 +123,7 @@ function Login() {
             Zaloguj się
           </Typography>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             label="Email"
             type="email"
@@ -96,7 +135,7 @@ function Login() {
             }}
           />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             label="Hasło"
             type="password"
