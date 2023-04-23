@@ -12,6 +12,7 @@ import Register from "./components/pages/Register";
 import Logout from "./components/pages/Logout";
 import ResetPassword from "./components/pages/ResetPassword";
 import Offer from "./components/pages/Offer";
+import OfferForm from "./components/pages/OfferForm";
 import MyCars from "./components/pages/MyCars";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -83,6 +84,7 @@ function App() {
               />
 
               <Route path="/offer/:id" Component={Offer} />
+              <Route path="/offerform" Component={OfferForm} />
             </Routes>
           </BrowserRouter>
         </ThemeProvider>
