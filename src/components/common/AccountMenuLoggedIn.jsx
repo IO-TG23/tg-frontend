@@ -6,7 +6,7 @@ const menuItems = [
   {
     icon: <MdElectricCar style={{ marginRight: 7 }} />,
     text: "Moje samochody",
-    href: "#",
+    href: "/mycars",
   },
   {
     icon: <MdCardMembership style={{ marginRight: 7 }} />,

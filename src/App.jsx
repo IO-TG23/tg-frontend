@@ -12,6 +12,9 @@ import Register from "./components/pages/Register";
 import Logout from "./components/pages/Logout";
 import ResetPassword from "./components/pages/ResetPassword";
 import Offer from "./components/pages/Offer";
+import MyCars from "./components/pages/MyCars";
+
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 const theme = createTheme({
   palette: {
@@ -66,11 +69,18 @@ function App() {
               <Route path="/" Component={Home} />
               <Route path="/offerlist" Component={OfferList} />
               <Route path="/about" Component={About} />
-              <Route path="/privacy" Component={Privacy} />
+              <Route
+                path="/privacy"
+                element={<ProtectedRoute component={<Privacy />} />}
+              />
               <Route path="/login" Component={Login} />
               <Route path="/register" Component={Register} />
               <Route path="/logout" Component={Logout} />
               <Route path="/resetpassword" Component={ResetPassword} />
+              <Route
+                path="/mycars"
+                element={<ProtectedRoute component={<MyCars />} />}
+              />
 
               <Route path="/offer/:id" Component={Offer} />
             </Routes>

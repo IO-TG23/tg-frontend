@@ -10,9 +10,11 @@ function Logout() {
     setManageAccountState({
       loggedIn: false,
     });
-    navigate({
-      pathname: "/",
-    });
+    setTimeout(() => {
+      navigate({
+        pathname: "/",
+      });
+    }, 0);
   }, []);
   return <></>;
 }
