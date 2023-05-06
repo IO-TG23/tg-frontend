@@ -20,6 +20,7 @@ import MyCars from "./components/pages/MyCars";
 import MyAccount from "./components/pages/MyAccount";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import AppDial from "./components/common/AppDial";
 
 const theme = createTheme({
   palette: {
@@ -130,6 +131,7 @@ function App() {
               />
               <Route path="/offer/:id" Component={Offer} />
             </Routes>
+            <AppDial />
           </BrowserRouter>
         </ThemeProvider>
       </AccountContext.Provider>
