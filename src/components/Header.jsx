@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { AppBar, Toolbar, IconButton, Typography, Badge } from "@mui/material";
-import { MdAccountCircle } from "react-icons/md";
+import { MdAccountCircle, MdNotifications } from "react-icons/md";
 import AccountMenu from "./common/AccountMenu";
 import logo from "../assets/logo.jpg";
 import DrawerMenu from "./common/DrawerMenu";
@@ -11,7 +11,7 @@ function Header() {
     state: { openAccountMenu, setOpenAccountMenu },
   } = useContext(AppContext);
   const {
-    state: { openDrawerMenu, setOpenDrawerMenu },
+    state: { openDrawerMenu, setOpenDrawerMenu, showNewOfferInfo },
   } = useContext(AppContext);
 
   const accountMenuRef = useRef();
@@ -41,7 +41,10 @@ function Header() {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Tanie graty
         </Typography>
-        <Badge badgeContent={<b>1</b>} color="success">
+        <Badge
+          badgeContent={showNewOfferInfo ? <MdNotifications /> : 0}
+          color="success"
+        >
           <IconButton
             color="inherit"
             ref={accountMenuRef}
