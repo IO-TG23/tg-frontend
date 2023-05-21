@@ -16,6 +16,7 @@ import Logout from "./components/pages/Logout";
 import ResetPassword from "./components/pages/ResetPassword";
 import ChangePassword from "./components/pages/ChangePassword";
 import Offer from "./components/pages/Offer";
+import OfferForm from "./components/pages/OfferForm";
 import MyCars from "./components/pages/MyCars";
 import MyAccount from "./components/pages/MyAccount";
 
@@ -130,6 +131,7 @@ function App() {
                 element={<ProtectedRoute component={<MyAccount />} />}
               />
               <Route path="/offer/:id" Component={Offer} />
+              <Route path="/offerform" Component={OfferForm} />
             </Routes>
             <AppDial />
           </BrowserRouter>
