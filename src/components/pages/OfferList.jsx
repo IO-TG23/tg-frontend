@@ -27,7 +27,7 @@ function OfferList() {
     useEffect(() => {
         try {
             //const request = await axios.get(
-            //    `${import.meta.env.REACT_APP_BACKEND_URL}/GetOffers`, {}
+            //    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {}
             //);
             // setData(request.data.message)
             fetch('../../../example.json', {
@@ -54,26 +54,10 @@ function OfferList() {
             parameters += gearbox != 'select' ? `&gearbox=${gearbox}` : ''
             parameters += drive != 'select' ? `&drive=${drive}` : ''
             console.log(parameters)
-            //const request = await axios.post(
-            //    `${import.meta.env.REACT_APP_BACKEND_URL}/GetOffers?${parameters}`, {}
+            //const request = await axios.get(
+            //    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer?${parameters}`, {}
             //);
             // setData(request.data.message)
-
-            fetch('../../../example.json', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (json) {
-                    setData(json.filter(el =>
-                        (pricelow ? el.start_production > parseInt(pricelow) : true) &&
-                        (pricehigh ? el.start_production < parseInt(pricehigh) : true)
-                    ))
-                });
         } catch (err) {
             //alert(request.data.message)
         }
@@ -90,7 +74,7 @@ function OfferList() {
     return (
         <MainContent>
             <Grid container justifyContent="space-between" alignItems="flex-start" >
-                <Grid item xs={2}>
+                <Grid item xs={2} style={{ position: "sticky", top: "50px" }}>
                     <Button
                         variant="contained"
                         color="primary"
@@ -190,12 +174,12 @@ function OfferList() {
 
                                 onClick={() => {
                                     navigate({
-                                        pathname: item.image ? "/offer/" + item.title : "/offerlist",
+                                        pathname: item.image ? "/offer/1" : "/offerlist",
                                     });
                                 }}
                             >
                                 <img
-                                    src={item.image ? item.image + "?w=248&fit=crop&auto=format" : ""}
+                                    src={item.image ? item.image : ""}
                                     alt={item.title ? item.title : ""}
                                     loading="lazy"
                                 />

@@ -7,11 +7,11 @@ function ProtectedRoute({ component }) {
   useEffect(() => {
     const jwtToken = localStorage.getItem("token");
 
-    if (!jwtToken) {
-      navigate({
-        pathname: "/",
-      });
-    }
+    // if (!jwtToken) {
+    //   navigate({
+    //     pathname: "/",
+    //   });
+    // }
 
     //TODO: make request to verify token
   }, []);
