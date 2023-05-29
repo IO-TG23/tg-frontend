@@ -8,11 +8,11 @@ function ProtectedRoute({ component }) {
   useEffect(() => {
     const jwtToken = localStorage.getItem("token");
 
-    if (!jwtToken) {
-      navigate({
-        pathname: "/",
-      });
-    }
+    // if (!jwtToken) {
+    //   navigate({
+    //     pathname: "/",
+    //   });
+    // }
 
     axios
       .post(`${import.meta.env.REACT_APP_BACKEND_URL}/Auth/verifyJwtToken`, {
