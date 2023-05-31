@@ -18,6 +18,7 @@ import ChangePassword from "./components/pages/ChangePassword";
 import Offer from "./components/pages/Offer";
 import OfferForm from "./components/pages/OfferForm";
 import MyCars from "./components/pages/MyCars";
+import ClientList from "./components/pages/ClientList";
 import MyAccount from "./components/pages/MyAccount";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -129,6 +130,10 @@ function App() {
               <Route
                 path="/myaccount"
                 element={<ProtectedRoute component={<MyAccount />} />}
+              />
+              <Route
+                path="/clientlist"
+                element={<ProtectedRoute component={<ClientList />} />}
               />
               <Route path="/offer/:id" Component={Offer} />
               <Route path="/offerform" Component={OfferForm} />
