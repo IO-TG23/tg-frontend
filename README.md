@@ -13,4 +13,4 @@ Frontend aplikacji internetowej wspomagającej pracę komisu samochodowego wraz 
 
 * Material UI
 ## Sposób uruchomienia
-Aplikację można włączyć korzystając ze strony [aplikacja](https://tanie-graty.netlify.app/): https://tanie-graty.netlify.app/
+Aplikację można włączyć korzystając ze strony: https://tanie-graty.netlify.app/
