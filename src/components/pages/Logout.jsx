@@ -7,6 +7,9 @@ function Logout() {
 
   useEffect(() => {
     localStorage.removeItem("token");
+    localStorage.removeItem("clientId");
+    localStorage.removeItem("email");
+
     setManageAccountState({
       loggedIn: false,
     });

@@ -131,7 +131,10 @@ function App() {
                 element={<ProtectedRoute component={<MyAccount />} />}
               />
               <Route path="/offer/:id" Component={Offer} />
-              <Route path="/offerform" Component={OfferForm} />
+              <Route
+                path="/offerform"
+                element={<ProtectedRoute component={<OfferForm />} />}
+              />
             </Routes>
             <AppDial />
           </BrowserRouter>
