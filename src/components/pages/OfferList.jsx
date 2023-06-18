@@ -25,41 +25,32 @@ function OfferList() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        try {
-            //const request = await axios.get(
-            //    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {}
-            //);
-            // setData(request.data.message)
-            fetch('../../../example.json', {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            })
-                .then(function (response) {
-                    return response.json();
-                })
-                .then(function (json) {
-                    setData(json)
-                });
-        } catch (err) {
-            //alert(request.data.message)
-        }
+        GetData()
     }, [])
 
-    const search = async () => {
+    const GetData = async () => {
+        try {
+            const request = await axios.get(
+                `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {});
+            setData(request.data.message)
+        } catch (err) {
+            alert(request.data.message)
+        }
+    };
+
+    const Search = async () => {
         try {
             let parameters = `pricelow=${pricelow ? pricelow : 0}`
             parameters += pricehigh ? `&pricehigh=${pricehigh}` : ''
             parameters += gearbox != 'select' ? `&gearbox=${gearbox}` : ''
             parameters += drive != 'select' ? `&drive=${drive}` : ''
-            console.log(parameters)
-            //const request = await axios.get(
-            //    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer?${parameters}`, {}
-            //);
-            // setData(request.data.message)
+            const request = await axios.get(
+                `${import.meta.env.REACT_APP_BACKEND_URL}/Offer?${parameters}`, {});
+
+            setData(request.data.message)
         } catch (err) {
-            //alert(request.data.message)
+            console.log(err)
+            alert(JSON.stringify(err.response.data.messages))
         }
     };
 
@@ -159,7 +150,7 @@ function OfferList() {
                         variant="contained"
                         color="primary"
                         onClick={() => {
-                            search()
+                            Search()
                         }}
                     >
                         Wyszukaj

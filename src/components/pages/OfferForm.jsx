@@ -12,22 +12,23 @@ import {
 import axios from "axios";
 
 function OfferForm() {
-  const [name, setName] = React.useState("");
-  const [gearbox, setGeabox] = React.useState("select");
-  const [drive, setDrive] = React.useState("select");
-  const [numberOfDoors, setNumberOfDoors] = React.useState("");
-  const [numberOfSeats, setNumberOfSeats] = React.useState("");
-  const [bootCapacity, setBootCapacity] = React.useState("");
-  const [length, setLength] = React.useState("");
-  const [height, setHeight] = React.useState("");
-  const [width, setWidth] = React.useState("");
-  const [productionStartYear, setProductionStartYear] = React.useState("");
-  const [productionEndYear, setProductionEndYear] = React.useState("");
-  const [wheelBase, setWheelBase] = React.useState("");
-  const [backWheelTrack, setBackWheelTrack] = React.useState("");
-  const [frontWheelTrack, setFrontWheelTrack] = React.useState("");
-  const [vehicleDescription, setVehicleDescription] = React.useState("");
-  const [clientId, setClientId] = React.useState("");
+    const [id, setId] = React.useState(null);
+    const [name, setName] = React.useState('');
+    const [gearbox, setGeabox] = React.useState('select');
+    const [drive, setDrive] = React.useState('select');
+    const [numberOfDoors, setNumberOfDoors] = React.useState('');
+    const [numberOfSeats, setNumberOfSeats] = React.useState('');
+    const [bootCapacity, setBootCapacity] = React.useState('');
+    const [length, setLength] = React.useState('');
+    const [height, setHeight] = React.useState('');
+    const [width, setWidth] = React.useState('');
+    const [productionStartYear, setProductionStartYear] = React.useState('');
+    const [productionEndYear, setProductionEndYear] = React.useState('');
+    const [wheelBase, setWheelBase] = React.useState('');
+    const [backWheelTrack, setBackWheelTrack] = React.useState('');
+    const [frontWheelTrack, setFrontWheelTrack] = React.useState('');
+    const [vehicleDescription, setVehicleDescription] = React.useState('');
+
 
   const [price, setPrice] = React.useState("");
   const [description, setDescription] = React.useState("");
@@ -40,6 +41,7 @@ function OfferForm() {
     setClientId(localStorage.getItem("clientId"));
 
     if (location.state) {
+      setId(location.state.id)
       setName(location.state.vehicle.name);
       setGeabox(location.state.vehicle.gearbox);
       setDrive(location.state.vehicle.drive);
@@ -159,7 +161,7 @@ function OfferForm() {
     },
   ];
 
-  const AddOffer = async () => {
+  const AddOrModifyOffer = async () => {
     try {
       let vehicle = {
         name: name,
@@ -180,27 +182,43 @@ function OfferForm() {
         clientId: clientId,
       };
 
-      let offer = {
-        vehicle: vehicle,
-        price: price,
-        description: description,
-        contactEmail: email,
-        contactPhoneNumber: phone,
-      };
-      console.log(offer);
-      await axios.post(
-        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`,
-        {
-          ...offer,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      if (id) {
+          const request = await axios.put(
+              `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`, 
+              {
+                vehicle: vehicle,
+                price: price,
+                description: description,
+                contactEmail: email,
+                contactPhoneNumber: phone
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+           );
+      }
+      else {
+          const request = await axios.post(
+              `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, 
+              {
+                vehicle: vehicle,
+                price: price,
+                description: description,
+                contactEmail: email,
+                contactPhoneNumber: phone
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+          );
+      }
     } catch (err) {
-      alert(err);
+        console.log(err)
+        alert(JSON.stringify(err.response.data.messages))
     }
   };
 
@@ -365,17 +383,18 @@ function OfferForm() {
         />
       </Grid>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => {
-          AddOffer();
-        }}
-      >
-        Wyślij ofertę
-      </Button>
-    </MainContent>
-  );
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                    AddOrModifyOffer()
+                }}
+            >
+                Wyślij ofertę
+            </Button>
+        </MainContent >
+    );
+
 }
 
 export default OfferForm;
