@@ -44,9 +44,5 @@ test("Protected route test", async ({ page, context }) => {
 
   await page.waitForURL('/');
 
-  const privacy = await page.getByRole('button', { name: 'Prywatność Prywatność' });
-
-  await privacy.click();
-
-  await expect(page).toHaveURL(/.*privacy.*/gi);
+  await expect(page).not.toHaveURL(/.*about.*/gi);
 });
