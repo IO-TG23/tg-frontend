@@ -12,6 +12,7 @@ import {
 import axios from "axios";
 
 function OfferForm() {
+    const [id, setId] = React.useState(null);
     const [name, setName] = React.useState('');
     const [gearbox, setGeabox] = React.useState('select');
     const [drive, setDrive] = React.useState('select');
@@ -37,6 +38,7 @@ function OfferForm() {
 
     useEffect(() => {
         if (location.state) {
+            setId(location.state.id)
             setName(location.state.vehicle.name)
             setGeabox(location.state.vehicle.gearbox)
             setDrive(location.state.vehicle.drive)
@@ -83,7 +85,7 @@ function OfferForm() {
         { label: "Numer telefonu", placeholder: "+48 123 456 789", function: setPhone, value: phone, type: "tel" }
     ]
 
-    const AddOffer = async () => {
+    const AddOrModifyOffer = async () => {
         try {
             let vehicle = {
                 name: name,
@@ -103,27 +105,29 @@ function OfferForm() {
                 drive: drive,
             }
 
-            let offer = {
-                vehicle: vehicle,
-                price: price,
-                description: description,
-                contactEmail: email,
-                contactPhoneNumber: phone
+            if (id) {
+                const request = await axios.put(
+                    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`, {
+                    vehicle: vehicle,
+                    price: price,
+                    description: description,
+                    contactEmail: email,
+                    contactPhoneNumber: phone
+                });
             }
-
-            let json = JSON.stringify(offer)
-            console.log(json)
-
-            //const request = await axios.post(
-            //    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {
-            //     vehicle: vehicle,
-            //     price: price,
-            //     description: description,
-            //     contactEmail: email,
-            //     contactPhoneNumber: phone
-            // });
+            else {
+                const request = await axios.post(
+                    `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {
+                    vehicle: vehicle,
+                    price: price,
+                    description: description,
+                    contactEmail: email,
+                    contactPhoneNumber: phone
+                });
+            }
         } catch (err) {
-
+            console.log(err)
+            alert(JSON.stringify(err.response.data.messages))
         }
     };
 
@@ -266,7 +270,7 @@ function OfferForm() {
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                    AddOffer()
+                    AddOrModifyOffer()
                 }}
             >
                 Wyślij ofertę
