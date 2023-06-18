@@ -21,12 +21,12 @@ function MyCars() {
 
   const GetData = async (id) => {
     try {
-      // const request = await axios.get(
-      //   `${import.meta.env.REACT_APP_BACKEND_URL}/...`, {}
-      // );
-      // setData(request.data.message)
+      const request = await axios.get(
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {});
+      setData(request.data.message.filter(item => item.vehicle.clientId == localStorage.getItem("clientId")))
     } catch (err) {
       console.log(err)
+      alert("Błąd pobrania ofert, spróbuj ponownie bądź skontaktuj się z administratorem");
     }
   };
 

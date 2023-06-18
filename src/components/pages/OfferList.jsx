@@ -34,7 +34,8 @@ function OfferList() {
                 `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, {});
             setData(request.data.message)
         } catch (err) {
-            alert(request.data.message)
+            console.log(err)
+            alert("Błąd wyszukania ofert, spróbuj ponownie bądź skontaktuj się z administratorem");
         }
     };
 

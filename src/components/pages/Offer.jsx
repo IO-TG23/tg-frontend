@@ -92,6 +92,7 @@ function Offer() {
       }
     } catch (err) {
       console.log(err)
+      alert("Nie znaleziono oferty, spróbuj ponownie bądź skontaktuj się z administratorem")
     }
   }
 
