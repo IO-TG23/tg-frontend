@@ -71,7 +71,7 @@ function ClientList() {
         <MainContent>
             <Grid container style={{ width: "500px", minHeight: "100px", margin: "0 auto", padding: "5px", boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }} direction="column" >
                 <TableContainer>
-                    {data.map((client) => (
+                    {data?.map((client) => (
                         <TableRow style={{ width: "100%" }}>
                             <TableCell>
                                 <input

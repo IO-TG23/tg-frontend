@@ -12,29 +12,29 @@ import {
 import axios from "axios";
 
 function OfferForm() {
-    const [id, setId] = React.useState(null);
-    const [name, setName] = React.useState('');
-    const [gearbox, setGeabox] = React.useState('select');
-    const [drive, setDrive] = React.useState('select');
-    const [numberOfDoors, setNumberOfDoors] = React.useState('');
-    const [numberOfSeats, setNumberOfSeats] = React.useState('');
-    const [bootCapacity, setBootCapacity] = React.useState('');
-    const [length, setLength] = React.useState('');
-    const [height, setHeight] = React.useState('');
-    const [width, setWidth] = React.useState('');
-    const [productionStartYear, setProductionStartYear] = React.useState('');
-    const [productionEndYear, setProductionEndYear] = React.useState('');
-    const [wheelBase, setWheelBase] = React.useState('');
-    const [backWheelTrack, setBackWheelTrack] = React.useState('');
-    const [frontWheelTrack, setFrontWheelTrack] = React.useState('');
-    const [vehicleDescription, setVehicleDescription] = React.useState('');
-    const [clientId, setClientId] = React.useState('');
-
+  const [id, setId] = React.useState(null);
+  const [name, setName] = React.useState("");
+  const [gearbox, setGeabox] = React.useState("select");
+  const [drive, setDrive] = React.useState("select");
+  const [numberOfDoors, setNumberOfDoors] = React.useState("");
+  const [numberOfSeats, setNumberOfSeats] = React.useState("");
+  const [bootCapacity, setBootCapacity] = React.useState("");
+  const [length, setLength] = React.useState("");
+  const [height, setHeight] = React.useState("");
+  const [width, setWidth] = React.useState("");
+  const [productionStartYear, setProductionStartYear] = React.useState("");
+  const [productionEndYear, setProductionEndYear] = React.useState("");
+  const [wheelBase, setWheelBase] = React.useState("");
+  const [backWheelTrack, setBackWheelTrack] = React.useState("");
+  const [frontWheelTrack, setFrontWheelTrack] = React.useState("");
+  const [vehicleDescription, setVehicleDescription] = React.useState("");
+  const [clientId, setClientId] = React.useState("");
 
   const [price, setPrice] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
+  const [blobs, setBlobs] = React.useState(null);
 
   const location = useLocation();
 
@@ -42,7 +42,7 @@ function OfferForm() {
     setClientId(localStorage.getItem("clientId"));
 
     if (location.state) {
-      setId(location.state.id)
+      setId(location.state.id);
       setName(location.state.vehicle.name);
       setGeabox(location.state.vehicle.gearbox);
       setDrive(location.state.vehicle.drive);
@@ -184,42 +184,78 @@ function OfferForm() {
       };
 
       if (id) {
-          const request = await axios.put(
-              `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`, 
-              {
-                vehicle: vehicle,
-                price: price,
-                description: description,
-                contactEmail: email,
-                contactPhoneNumber: phone
-              },
+        const request = await axios.put(
+          `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`,
+          {
+            vehicle: vehicle,
+            price: price,
+            description: description,
+            contactEmail: email,
+            contactPhoneNumber: phone,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        alert("Oferta dodana");
+      } else {
+        const request = await axios.post(
+          `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`,
+          {
+            vehicle: vehicle,
+            price: price,
+            description: description,
+            contactEmail: email,
+            contactPhoneNumber: phone,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (blobs) {
+          try {
+            const latestRequest = await axios.get(
+              `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`
+            );
+
+            const dt = await latestRequest.data;
+
+            const latest = dt[0];
+
+            const blobId = latest.id;
+
+            var formdata = new FormData();
+
+            for (let b of blobs) {
+              formdata.append("blobs", b, b.name);
+            }
+
+            const res = await axios.post(
+              `${import.meta.env.REACT_APP_BACKEND_URL}/Blob/${blobId}`,
+              formdata,
               {
                 headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "multipart/form-data",
                 },
               }
-           );
-      }
-      else {
-          const request = await axios.post(
-              `${import.meta.env.REACT_APP_BACKEND_URL}/Offer`, 
-              {
-                vehicle: vehicle,
-                price: price,
-                description: description,
-                contactEmail: email,
-                contactPhoneNumber: phone
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-              }
-          );
+            );
+
+            console.log(res);
+          } catch (err) {
+            alert("Dodanie obrazków niemożliwe");
+          }
+        }
+
+        alert("Oferta dodana");
       }
     } catch (err) {
-        console.log(err)
-        alert(JSON.stringify(err.response.data.messages))
+      console.log(err);
+      alert(JSON.stringify(err.response.data.messages));
     }
   };
 
@@ -382,20 +418,29 @@ function OfferForm() {
             setDescription(event.target.value);
           }}
         />
+        <Button variant="contained" component="label">
+          Upload File
+          <input
+            type="file"
+            onChange={(e) => {
+              setBlobs(e.currentTarget.files);
+            }}
+            hidden
+          />
+        </Button>
       </Grid>
 
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={async () => {
-                    await AddOrModifyOffer();
-                }}
-            >
-                Wyślij ofertę
-            </Button>
-        </MainContent >
-    );
-
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={async () => {
+          await AddOrModifyOffer();
+        }}
+      >
+        Wyślij ofertę
+      </Button>
+    </MainContent>
+  );
 }
 
 export default OfferForm;
