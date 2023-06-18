@@ -28,6 +28,7 @@ function OfferForm() {
     const [backWheelTrack, setBackWheelTrack] = React.useState('');
     const [frontWheelTrack, setFrontWheelTrack] = React.useState('');
     const [vehicleDescription, setVehicleDescription] = React.useState('');
+    const [clientId, setClientId] = React.useState('');
 
 
   const [price, setPrice] = React.useState("");
