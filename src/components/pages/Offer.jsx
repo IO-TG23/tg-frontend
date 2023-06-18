@@ -27,14 +27,13 @@ function Offer() {
   ]);
 
   const exportOffer = async () => {
-    //'w miejsce guida ID oferty'
     const email = localStorage.getItem("email");
 
     try {
       await axios.post(
         `${
-          import.meta.env.REACT_APP_BACKEND_URL
-        }/Offer/export/${"61e3f736-356c-4d37-951a-1028aa079012"}`,
+        import.meta.env.REACT_APP_BACKEND_URL
+        }/Offer/export/${offer.id}`,
         { email }
       );
 

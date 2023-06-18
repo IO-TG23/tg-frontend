@@ -33,11 +33,23 @@ function MyCars() {
   const DeleteOffer = async (id) => {
     try {
       const request = await axios.delete(
-        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`, {}
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        }
       );
+
+      setTimeout(() => {
+        navigate({
+          pathname: "/mycars",
+        });
+      }, 1000);
+
     } catch (err) {
       console.log(err)
-      alert(JSON.stringify(err.response.data.messages))
+      alert("Błąd usunięcia oferty, spróbuj ponownie bądź skontaktuj się z administratorem");
     }
   };
 

@@ -50,7 +50,7 @@ function OfferList() {
             setData(request.data.message)
         } catch (err) {
             console.log(err)
-            alert(JSON.stringify(err.response.data.messages))
+            alert("Błąd wyszukania ofert, spróbuj ponownie bądź skontaktuj się z administratorem");
         }
     };
 
