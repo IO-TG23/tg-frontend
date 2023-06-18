@@ -29,6 +29,24 @@ test("Account menu interaction", async ({ page }) => {
 
   await accountBtn.click();
   await page.getByRole('menuitem', { name: 'Zarejestruj' }).click();
-  
-  await expect(page).toHaveScreenshot();
+
+  const loginOption = page.getByText('Posiadasz konto? Zaloguj się');
+
+  await expect(loginOption).toHaveText(/Posiadasz.+/gi);
+});
+
+test("Protected route test", async ({ page, context }) => {
+  await page.goto("/offerlist");
+
+  const btn = await page.getByRole('button', { name: 'Dodaj ofertę' });
+
+  await btn.click();
+
+  await page.waitForURL('/');
+
+  const privacy = await page.getByRole('button', { name: 'Prywatność Prywatność' });
+
+  await privacy.click();
+
+  await expect(page).toHaveURL(/.*privacy.*/gi);
 });

@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
 import MainContent from "../common/MainContent";
-import { Grid, TextField, Typography, Alert, Button } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Typography,
+  Alert,
+  Button,
+  Link as MuiLink,
+} from "@mui/material";
 import axios from "axios";
 import { MdPassword } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function ResetPassword() {
   const [email, setEmail] = useState("");
@@ -12,6 +20,8 @@ function ResetPassword() {
   const [alertMsg, setAlertMsg] = useState(
     "Odwiedź swój adres mailowy po dalsze instrukcje."
   );
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (email && email.length > 0) {
@@ -23,15 +33,16 @@ function ResetPassword() {
 
   const handleClick = async () => {
     try {
-      const request = await axios.post(
-        `${import.meta.env.REACT_APP_BACKEND_URL}/auth/resetPassword`,
-        {
-          email,
-        }
+      const request = await axios.get(
+        `${
+          import.meta.env.REACT_APP_BACKEND_URL
+        }/auth/resetPassword?email=${email}`
       );
 
       if (request.status === 204 || request.status === 200) {
         setShowAlert(true);
+        setAlertVariant("info");
+        setAlertMsg("Hasło zresetowane - odwiedź mail po dalsze instrukcje");
       }
     } catch (err) {
       setShowAlert(true);
@@ -71,6 +82,18 @@ function ResetPassword() {
               setEmail(e.target.value);
             }}
           />
+        </Grid>
+        <Grid item xs={12}>
+          <MuiLink
+            typography={"subtitle2"}
+            onClick={() => {
+              navigate({
+                pathname: "/changepassword",
+              });
+            }}
+          >
+            Zmień hasło
+          </MuiLink>
         </Grid>
         <Grid item xs={12}>
           <Button

@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { AccountContext } from "../../App";
 import { MdLockOpen, MdOutlineLogin } from "react-icons/md";
 import axios from "axios";
-
+import jwt_decode from "jwt-decode";
 import AppModal from "../common/AppModal";
 
 function Login() {
@@ -47,13 +47,21 @@ function Login() {
         {
           email,
           password,
-          code : code.toString()
+          code: code.toString(),
         }
       );
+      
       localStorage.setItem("token", request.data.message);
+
       setManageAccountState({
         loggedIn: true,
       });
+
+      const decodedToken = jwt_decode(request.data.message);
+
+      localStorage.setItem("clientId", decodedToken.ClientId);
+      localStorage.setItem("email", decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"]);
+
       setShowAlert(true);
 
       setTimeout(() => {

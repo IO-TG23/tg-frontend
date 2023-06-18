@@ -24,7 +24,7 @@ function MyAccount() {
 
       localStorage.removeItem("token");
 
-      navigate("/");
+      window.location.href = "/";
     } catch (err) {
       alert("Wystąpił błąd! Spróbuj ponownie później");
     }
