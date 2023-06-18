@@ -16,6 +16,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * @description Single displayable offer
+ * @returns JSX.Element
+ */
 function Offer() {
   const [offer, setOffer] = React.useState({ vehicle: {} });
   const [firstColumn, setFirstColumn] = React.useState([]);

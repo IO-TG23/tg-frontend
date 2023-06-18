@@ -12,6 +12,11 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+
+/**
+ * @description Managable list of clients
+ * @returns JSX.Element
+ */
 function ClientList() {
     const [data, setData] = React.useState([]);
     const [selectedClients, setSelectedClients] = React.useState([]);

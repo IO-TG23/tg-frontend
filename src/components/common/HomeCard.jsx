@@ -8,6 +8,11 @@ import {
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * @description Home card component
+ * @param {*} props
+ * @returns JSX.Element
+ */
 function HomeCard({ title, image, href }) {
   const navigate = useNavigate();
 

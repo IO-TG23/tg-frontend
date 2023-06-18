@@ -4,6 +4,10 @@ import { Grid, TextField, Typography, Alert, Button } from "@mui/material";
 import axios from "axios";
 import { MdPassword } from "react-icons/md";
 
+/**
+ * @description Component for changing users' password
+ * @returns JSX.Element
+ */
 function ChangePassword() {
   const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");

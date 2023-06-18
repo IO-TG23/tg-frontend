@@ -1,6 +1,11 @@
 import { Paper } from "@mui/material";
 import React from "react";
 
+/**
+ * @description Container for all pages
+ * @param {*} param0 
+ * @returns JSX.Element
+ */
 function MainContent({ children }) {
   return (
     <Paper

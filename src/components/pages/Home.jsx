@@ -4,6 +4,10 @@ import LocationMap from "../common/LocationMap";
 import MainContent from "../common/MainContent";
 import HomeCard from "../common/HomeCard";
 
+/**
+ * @description Home page
+ * @returns JSX.Element
+ */
 function Home() {
   return (
     <MainContent>

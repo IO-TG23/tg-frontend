@@ -3,6 +3,11 @@ import { MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../../App";
 
+/**
+ * @description Single menu option component
+ * @param {*} props 
+ * @returns JSX.Element
+ */
 function MenuOption({ text, href, icon }) {
   const navigate = useNavigate();
   const {

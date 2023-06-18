@@ -14,6 +14,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * @description Listing of currently available offers
+ * @returns JSX.Element
+ */
 function OfferList() {
   const [data, setData] = useState([]);
   const [gearbox, setGeabox] = React.useState("select");

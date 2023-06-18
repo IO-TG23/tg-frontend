@@ -15,6 +15,10 @@ const menuItems = [
   },
 ];
 
+/**
+ * @description Account menu for logged out user
+ * @returns JSX.Element
+ */
 function AccountMenuLoggedOut() {
   return (
     <>

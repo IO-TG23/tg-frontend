@@ -2,6 +2,10 @@ import React from "react";
 import MainContent from "../common/MainContent";
 import { Typography } from "@mui/material";
 
+/**
+ * @description Privacy page
+ * @returns JSX.Element
+ */
 function Privacy() {
   return (
     <MainContent>

@@ -48,6 +48,10 @@ const initialAccountState = {
 export const AccountContext = createContext(null);
 export const AppContext = createContext(null);
 
+/**
+ * @description App - main component of the app
+ * @returns JSX.Element
+ */
 function App() {
   const [manageAccountState, setManageAccountState] = useState({
     ...initialAccountState,

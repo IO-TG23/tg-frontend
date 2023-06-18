@@ -6,6 +6,10 @@ import axios from "axios";
 
 import MainContent from "../common/MainContent";
 
+/**
+ * @description Managing user account
+ * @returns JSX.Element
+ */
 function MyAccount() {
   const [deleteDisabled, setDeleteDisabled] = useState(true);
 

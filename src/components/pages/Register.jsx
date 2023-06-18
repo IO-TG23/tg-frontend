@@ -14,6 +14,10 @@ import axios from "axios";
 
 import AppModal from "../common/AppModal";
 
+/**
+ * @description Component with logic for registration
+ * @returns JSX.Element
+ */
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

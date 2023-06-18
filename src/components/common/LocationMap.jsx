@@ -1,6 +1,11 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
+/**
+ * @description Based on LeafletJS map component
+ * @param {*} props 
+ * @returns JSX.Element
+ */
 function LocationMap({ position, popupMessage }) {
   return (
     <MapContainer center={position} zoom={16} scrollWheelZoom={false} style={{

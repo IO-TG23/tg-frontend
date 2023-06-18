@@ -13,6 +13,10 @@ import {
   SiReact,
 } from "react-icons/si";
 
+/**
+ * @description About page
+ * @returns JSX.Element
+ */
 function About() {
   return (
     <MainContent>

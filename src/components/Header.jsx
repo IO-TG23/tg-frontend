@@ -6,6 +6,10 @@ import logo from "../assets/logo.jpg";
 import DrawerMenu from "./common/DrawerMenu";
 import { AppContext } from "../App";
 
+/**
+ * @description Header component containing app menu and other options
+ * @returns JSX.Element
+ */
 function Header() {
   const {
     state: { openAccountMenu, setOpenAccountMenu },

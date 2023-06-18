@@ -24,6 +24,10 @@ const actions = [
   },
 ];
 
+/**
+ * @description App dial with quick actions (sharing, Github)
+ * @returns JSX.Element
+ */
 function AppDial() {
   return (
     <SpeedDial

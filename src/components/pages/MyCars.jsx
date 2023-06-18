@@ -10,6 +10,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * @description Component displaying cars posessed by currently logged in client
+ * @returns JSX.Element
+ */
 function MyCars() {
   const [data, setData] = useState([]);
 

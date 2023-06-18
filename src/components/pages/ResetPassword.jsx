@@ -12,6 +12,10 @@ import axios from "axios";
 import { MdPassword } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * @description Component with logic for reseting password
+ * @returns JSX.Element
+ */
 function ResetPassword() {
   const [email, setEmail] = useState("");
   const [showAlert, setShowAlert] = useState(false);

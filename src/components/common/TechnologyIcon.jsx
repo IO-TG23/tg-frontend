@@ -1,6 +1,11 @@
 import React from "react";
 import { Paper, IconButton } from "@mui/material";
 
+/**
+ * @description Icon for displaying technologies used in the project
+ * @param {*} params 
+ * @returns JSX.Element
+ */
 function TechnologyIcon({ icon, href }) {
   const handleClick = () => {
     window.location.href = href;

@@ -15,6 +15,10 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import AppModal from "../common/AppModal";
 
+/**
+ * @description Component with logic for logging in
+ * @returns JSX.Element
+ */
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -1,6 +1,11 @@
 import React from "react";
 import { Modal, Box, Grid, Paper, Typography } from "@mui/material";
 
+/**
+ * @description Modal with app styles applied
+ * @param {*} props 
+ * @returns JSX.Element
+ */
 function AppModal({
   openModal,
   handleModalClose,

@@ -25,6 +25,10 @@ const menuItems = [
   },
 ];
 
+/**
+ * @description Account menu for logged in users
+ * @returns JSX.Element
+ */
 function AccountMenuLoggedIn() {
   return (
     <>

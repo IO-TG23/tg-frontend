@@ -11,6 +11,10 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+/**
+ * @description Form for submitting new car offers
+ * @returns JSX.Element
+ */
 function OfferForm() {
   const [id, setId] = React.useState(null);
   const [name, setName] = React.useState("");

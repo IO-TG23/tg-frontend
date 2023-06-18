@@ -2,6 +2,11 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
+/**
+ * @description Component that is used with Route to protect certain functionalities and make them accessible only for logged in users
+ * @param {component} param0 
+ * @returns JSX.Element
+ */
 function ProtectedRoute({ component }) {
   const navigate = useNavigate();
 

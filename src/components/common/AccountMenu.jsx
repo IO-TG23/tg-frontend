@@ -4,6 +4,11 @@ import { AccountContext } from "../../App";
 import AccountMenuLoggedIn from "./AccountMenuLoggedIn";
 import AccountMenuLoggedOut from "./AccountMenuLoggedOut";
 
+/**
+ * @description General account menu component
+ * @param {*} props 
+ * @returns JSX.Element
+ */
 function AccountMenu({ accountMenuRef, open, setOpen }) {
   const handleClose = () => {
     setOpen((prev) => !prev);
