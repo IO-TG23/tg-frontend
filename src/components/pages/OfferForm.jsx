@@ -386,8 +386,8 @@ function OfferForm() {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                    AddOrModifyOffer()
+                onClick={async () => {
+                    await AddOrModifyOffer();
                 }}
             >
                 Wyślij ofertę
