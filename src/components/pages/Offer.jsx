@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import MainContent from "../common/MainContent";
+import { MdImportExport } from "react-icons/md";
+import { AccountContext } from "../../App";
+
 import {
   Breadcrumbs,
   Grid,
@@ -22,6 +25,31 @@ function Offer() {
     <Link href="/">Dom</Link>,
     <Link href="/offerlist">Oferty</Link>,
   ]);
+
+  const exportOffer = async () => {
+    //'w miejsce guida ID oferty'
+    const email = localStorage.getItem("email");
+
+    try {
+      await axios.post(
+        `${
+          import.meta.env.REACT_APP_BACKEND_URL
+        }/Offer/export/${"61e3f736-356c-4d37-951a-1028aa079012"}`,
+        { email }
+      );
+
+      alert("Eksport zakończony powodzeniem");
+    } catch (e) {
+      alert(
+        "Eksport nieudany, spróbuj ponownie bądź skontaktuj się z administratorem"
+      );
+    }
+  };
+
+  const {
+    state: { loggedIn },
+  } = useContext(AccountContext);
+
   useEffect(() => {
     setBreadCrumbs((prev) => [
       ...prev,
@@ -44,18 +72,24 @@ function Offer() {
           { name: "Pojemność bagażnika", value: car.vehicle.bootCapacity },
           { name: "Długość", value: car.vehicle.length },
           { name: "Wysokość", value: car.vehicle.height },
-          { name: "Szerokość", value: car.vehicle.width }
-        ]
-        setFirstColumn(firstColumn)
+          { name: "Szerokość", value: car.vehicle.width },
+        ];
+        setFirstColumn(firstColumn);
 
         let secondColumn = [
-          { name: "Rok rozpoczęcia produkcji", value: car.vehicle.productionStartYear },
-          { name: "Rok zakończenia produkcji", value: car.vehicle.productionEndYear },
+          {
+            name: "Rok rozpoczęcia produkcji",
+            value: car.vehicle.productionStartYear,
+          },
+          {
+            name: "Rok zakończenia produkcji",
+            value: car.vehicle.productionEndYear,
+          },
           { name: "Rozstaw osi", value: car.vehicle.wheelBase },
           { name: "Rozstaw kół - tył", value: car.vehicle.backWheelTrack },
-          { name: "Rozstaw kół - przód", value: car.vehicle.frontWheelTrack }
-        ]
-        setSecondColumn(secondColumn)
+          { name: "Rozstaw kół - przód", value: car.vehicle.frontWheelTrack },
+        ];
+        setSecondColumn(secondColumn);
       }
     } catch (err) {
       console.log(err)
@@ -64,26 +98,49 @@ function Offer() {
 
   return (
     <MainContent>
-      <Grid container style={{ width: "1200px", margin: "0 auto", padding: "30px", boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }} direction="column" >
-        <Grid container direction="row" >
+      <Grid
+        container
+        style={{
+          width: "1200px",
+          margin: "0 auto",
+          padding: "30px",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        }}
+        direction="column"
+      >
+        <Grid container direction="row">
           <img
             src={offer.image}
             alt={offer.vehicle.name}
             width="70%"
             loading="lazy"
           />
-          <Typography style={{ marginLeft: "20px", width: "25%", fontSize: "medium", fontWeight: "bold" }}>
-            Nazwa: {offer.vehicle.name}<br />
-            Cena: {offer.price}<br />
-            Skrzynia biegów: {offer.vehicle.gearbox}<br />
-            Napęd: {offer.vehicle.drive}<br />
-            Email: {offer.contactEmail}<br />
-            Numer telefonu: {offer.contactPhoneNumber}<br /><br />
+          <Typography
+            style={{
+              marginLeft: "20px",
+              width: "25%",
+              fontSize: "medium",
+              fontWeight: "bold",
+            }}
+          >
+            Nazwa: {offer.vehicle.name}
+            <br />
+            Cena: {offer.price}
+            <br />
+            Skrzynia biegów: {offer.vehicle.gearbox}
+            <br />
+            Napęd: {offer.vehicle.drive}
+            <br />
+            Email: {offer.contactEmail}
+            <br />
+            Numer telefonu: {offer.contactPhoneNumber}
+            <br />
+            <br />
             {offer.vehicle.description}
           </Typography>
         </Grid>
         <Grid container direction="row" style={{ margin: "0 auto" }}>
-          <TableContainer sx={{ 'tr td': { border: 0 }, width: "300px" }}>
+          <TableContainer sx={{ "tr td": { border: 0 }, width: "300px" }}>
             {firstColumn.map((item) => (
               <TableRow>
                 <TableCell>{item.name}</TableCell>
@@ -91,7 +148,7 @@ function Offer() {
               </TableRow>
             ))}
           </TableContainer>
-          <TableContainer sx={{ 'tr td': { border: 0 }, width: "300px" }}>
+          <TableContainer sx={{ "tr td": { border: 0 }, width: "300px" }}>
             {secondColumn.map((item) => (
               <TableRow>
                 <TableCell>{item.name}</TableCell>
@@ -99,12 +156,38 @@ function Offer() {
               </TableRow>
             ))}
           </TableContainer>
-          <Grid style={{ width: "500px", marginTop: "20px", fontSize: "large", lineHeight: "25px", marginLeft: "20px" }}>
+          <Grid
+            style={{
+              width: "500px",
+              marginTop: "20px",
+              fontSize: "large",
+              lineHeight: "25px",
+              marginLeft: "20px",
+            }}
+          >
             {offer.description}
           </Grid>
+          {loggedIn && (
+            <Grid container flexDirection={"column"}>
+              <Grid item>
+                <Typography variant="h6">Akcje</Typography>
+              </Grid>
+              <Grid item>
+                <IconButton
+                  color="primary"
+                  sx={{
+                    backgroundColor: "rgba(0,0,0,0.1)",
+                  }}
+                  onClick={exportOffer}
+                >
+                  <MdImportExport />
+                </IconButton>
+              </Grid>
+            </Grid>
+          )}
         </Grid>
       </Grid>
-    </MainContent >
+    </MainContent>
   );
 }
 

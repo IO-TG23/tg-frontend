@@ -31,7 +31,7 @@ const menuItemsLoggedIn = [
   {
     icon: <MdCardMembership style={{ marginRight: 7 }} />,
     text: "Moje konto",
-    href: "#",
+    href: "/myaccount",
   },
 ];
 
