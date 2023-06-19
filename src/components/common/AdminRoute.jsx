@@ -1,14 +1,21 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
-function ProtectedRoute({ component }) {
+function AdminRoute({ component }) {
   const navigate = useNavigate();
 
   useEffect(() => {
     const jwtToken = localStorage.getItem("token");
 
-    if (!jwtToken) {
+    const decoded = jwtDecode(jwtToken);
+    const roles =
+      decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+    const proper = jwtToken && (roles === "Admin" || roles.includes("Admin"));
+
+    if (!proper) {
       navigate({
         pathname: "/",
       });
@@ -34,4 +41,4 @@ function ProtectedRoute({ component }) {
   return <>{component}</>;
 }
 
-export default ProtectedRoute;
+export default AdminRoute;
