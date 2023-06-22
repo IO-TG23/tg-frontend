@@ -22,6 +22,8 @@ import ClientList from "./components/pages/ClientList";
 import MyAccount from "./components/pages/MyAccount";
 
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import AdminRoute from "./components/common/AdminRoute";
+
 import AppDial from "./components/common/AppDial";
 
 const theme = createTheme({
@@ -133,7 +135,7 @@ function App() {
               />
               <Route
                 path="/clientlist"
-                element={<ProtectedRoute component={<ClientList />} />}
+                element={<AdminRoute component={<ClientList />} />}
               />
               <Route path="/offer/:id" Component={Offer} />
               <Route

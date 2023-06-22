@@ -1,8 +1,13 @@
 import React from "react";
-import { MdElectricCar, MdCardMembership, MdLogout } from "react-icons/md";
+import { MdElectricCar, MdCardMembership, MdLogout, MdAccountBox } from "react-icons/md";
 import MenuOption from "./MenuOption";
 
 const menuItems = [
+  {
+    icon: <MdAccountBox style={{ marginRight: 7 }} />,
+    text: "Zarządzanie klientami",
+    href: "/clientlist",
+  },
   {
     icon: <MdElectricCar style={{ marginRight: 7 }} />,
     text: "Moje samochody",

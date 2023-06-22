@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainContent from "../common/MainContent";
-import { MdImportExport } from "react-icons/md";
+import { MdDelete, MdEdit, MdImportExport } from "react-icons/md";
 import { AccountContext } from "../../App";
 
 import {
@@ -11,15 +11,18 @@ import {
   Typography,
   TableContainer,
   TableRow,
-  TableCell
+  TableCell,
+  IconButton,
 } from "@mui/material";
 import axios from "axios";
+import ProtectedComponent from "../common/ProtectedComponent";
 
 function Offer() {
   const [offer, setOffer] = React.useState({ vehicle: {} });
   const [firstColumn, setFirstColumn] = React.useState([]);
   const [secondColumn, setSecondColumn] = React.useState([]);
   const params = useParams();
+  const navigate = useNavigate();
 
   const [breadCrumbs, setBreadCrumbs] = useState([
     <Link href="/">Dom</Link>,
@@ -27,14 +30,11 @@ function Offer() {
   ]);
 
   const exportOffer = async () => {
-    //'w miejsce guida ID oferty'
     const email = localStorage.getItem("email");
 
     try {
       await axios.post(
-        `${
-          import.meta.env.REACT_APP_BACKEND_URL
-        }/Offer/export/${"61e3f736-356c-4d37-951a-1028aa079012"}`,
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/export/${params.id}`,
         { email }
       );
 
@@ -46,55 +46,76 @@ function Offer() {
     }
   };
 
-  const {
-    state: { loggedIn },
-  } = useContext(AccountContext);
-
   useEffect(() => {
     setBreadCrumbs((prev) => [
       ...prev,
       <Typography key="3">{params.id}</Typography>,
     ]);
-    GetData()
+    GetData();
   }, []);
 
   const GetData = async () => {
     try {
       const request = await axios.get(
-        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`, {});
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${params.id}`,
+        {}
+      );
 
-      var car = request.data.message
+      var car = request.data;
       if (car) {
-        setOffer(car)
+        setOffer(car);
         let firstColumn = [
-          { name: "Ilość drzwi", value: car.vehicle.numberOfDoors },
-          { name: "Ilość siedzeń", value: car.vehicle.numberOfSeats },
-          { name: "Pojemność bagażnika", value: car.vehicle.bootCapacity },
-          { name: "Długość", value: car.vehicle.length },
-          { name: "Wysokość", value: car.vehicle.height },
-          { name: "Szerokość", value: car.vehicle.width },
+          { name: "Ilość drzwi", value: car.numberOfDoors },
+          { name: "Ilość siedzeń", value: car.numberOfSeats },
+          { name: "Pojemność bagażnika", value: car.bootCapacity },
+          { name: "Długość", value: car.length },
+          { name: "Wysokość", value: car.height },
+          { name: "Szerokość", value: car.width },
         ];
         setFirstColumn(firstColumn);
 
         let secondColumn = [
           {
             name: "Rok rozpoczęcia produkcji",
-            value: car.vehicle.productionStartYear,
+            value: car.productionStartYear,
           },
           {
             name: "Rok zakończenia produkcji",
-            value: car.vehicle.productionEndYear,
+            value: car.productionEndYear,
           },
-          { name: "Rozstaw osi", value: car.vehicle.wheelBase },
-          { name: "Rozstaw kół - tył", value: car.vehicle.backWheelTrack },
-          { name: "Rozstaw kół - przód", value: car.vehicle.frontWheelTrack },
+          { name: "Rozstaw osi", value: car.wheelBase },
+          { name: "Rozstaw kół - tył", value: car.backWheelTrack },
+          { name: "Rozstaw kół - przód", value: car.frontWheelTrack },
         ];
         setSecondColumn(secondColumn);
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
+
+  const editOffer = () => {
+    navigate(`/offerform?id=${params.id}`);
+  };
+
+  const deleteOffer = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${params.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      navigate({
+        pathname: "/offerlist",
+      });
+    } catch (e) {
+      alert("Usunięcie oferty niemożliwe");
+    }
+  };
 
   return (
     <MainContent>
@@ -110,8 +131,14 @@ function Offer() {
       >
         <Grid container direction="row">
           <img
-            src={offer.image}
-            alt={offer.vehicle.name}
+            src={
+              offer?.blobIds
+                ? `${import.meta.env.REACT_APP_BACKEND_URL}/Blob/${
+                    offer?.blobIds[0]
+                  }`
+                : ""
+            }
+            alt={offer.vehicleName}
             width="70%"
             loading="lazy"
           />
@@ -123,20 +150,18 @@ function Offer() {
               fontWeight: "bold",
             }}
           >
-            Nazwa: {offer.vehicle.name}
+            Nazwa: {offer.vehicleName}
             <br />
             Cena: {offer.price}
             <br />
-            Skrzynia biegów: {offer.vehicle.gearbox}
-            <br />
-            Napęd: {offer.vehicle.drive}
+            Skrzynia biegów: {offer.gearbox}
             <br />
             Email: {offer.contactEmail}
             <br />
             Numer telefonu: {offer.contactPhoneNumber}
             <br />
             <br />
-            {offer.vehicle.description}
+            {offer.vehicleDescription}
           </Typography>
         </Grid>
         <Grid container direction="row" style={{ margin: "0 auto" }}>
@@ -165,26 +190,49 @@ function Offer() {
               marginLeft: "20px",
             }}
           >
-            {offer.description}
+            {offer.vehicleDescription}
           </Grid>
-          {loggedIn && (
-            <Grid container flexDirection={"column"}>
-              <Grid item>
-                <Typography variant="h6">Akcje</Typography>
+          <ProtectedComponent
+            component={
+              <Grid container flexDirection={"column"}>
+                <Grid item>
+                  <Typography variant="h6">Akcje</Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="primary"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={exportOffer}
+                  >
+                    <MdImportExport />
+                  </IconButton>
+                  <IconButton
+                    color="info"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={editOffer}
+                  >
+                    <MdEdit />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={deleteOffer}
+                  >
+                    <MdDelete />
+                  </IconButton>
+                </Grid>
               </Grid>
-              <Grid item>
-                <IconButton
-                  color="primary"
-                  sx={{
-                    backgroundColor: "rgba(0,0,0,0.1)",
-                  }}
-                  onClick={exportOffer}
-                >
-                  <MdImportExport />
-                </IconButton>
-              </Grid>
-            </Grid>
-          )}
+            }
+          />
         </Grid>
       </Grid>
     </MainContent>
