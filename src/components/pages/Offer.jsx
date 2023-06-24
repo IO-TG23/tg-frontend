@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import MainContent from "../common/MainContent";
-import { MdImportExport } from "react-icons/md";
+import { MdDelete, MdEdit, MdImportExport } from "react-icons/md";
 import { AccountContext } from "../../App";
 
 import {
@@ -15,12 +15,14 @@ import {
   IconButton,
 } from "@mui/material";
 import axios from "axios";
+import ProtectedComponent from "../common/ProtectedComponent";
 
 function Offer() {
   const [offer, setOffer] = React.useState({ vehicle: {} });
   const [firstColumn, setFirstColumn] = React.useState([]);
   const [secondColumn, setSecondColumn] = React.useState([]);
   const params = useParams();
+  const navigate = useNavigate();
 
   const [breadCrumbs, setBreadCrumbs] = useState([
     <Link href="/">Dom</Link>,
@@ -43,10 +45,6 @@ function Offer() {
       );
     }
   };
-
-  const {
-    state: { loggedIn },
-  } = useContext(AccountContext);
 
   useEffect(() => {
     setBreadCrumbs((prev) => [
@@ -93,6 +91,29 @@ function Offer() {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const editOffer = () => {
+    navigate(`/offerform?id=${params.id}`);
+  };
+
+  const deleteOffer = async () => {
+    try {
+      await axios.delete(
+        `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${params.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      navigate({
+        pathname: "/offerlist",
+      });
+    } catch (e) {
+      alert("Usunięcie oferty niemożliwe");
     }
   };
 
@@ -171,24 +192,47 @@ function Offer() {
           >
             {offer.vehicleDescription}
           </Grid>
-          {loggedIn && (
-            <Grid container flexDirection={"column"}>
-              <Grid item>
-                <Typography variant="h6">Akcje</Typography>
+          <ProtectedComponent
+            component={
+              <Grid container flexDirection={"column"}>
+                <Grid item>
+                  <Typography variant="h6">Akcje</Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton
+                    color="primary"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={exportOffer}
+                  >
+                    <MdImportExport />
+                  </IconButton>
+                  <IconButton
+                    color="info"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={editOffer}
+                  >
+                    <MdEdit />
+                  </IconButton>
+                  <IconButton
+                    color="error"
+                    sx={{
+                      backgroundColor: "rgba(0,0,0,0.1)",
+                      margin: "5px",
+                    }}
+                    onClick={deleteOffer}
+                  >
+                    <MdDelete />
+                  </IconButton>
+                </Grid>
               </Grid>
-              <Grid item>
-                <IconButton
-                  color="primary"
-                  sx={{
-                    backgroundColor: "rgba(0,0,0,0.1)",
-                  }}
-                  onClick={exportOffer}
-                >
-                  <MdImportExport />
-                </IconButton>
-              </Grid>
-            </Grid>
-          )}
+            }
+          />
         </Grid>
       </Grid>
     </MainContent>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import MainContent from "../common/MainContent";
-import { useLocation } from "react-router-dom";
 import {
   Select,
   MenuItem,
@@ -10,6 +9,7 @@ import {
   Grid,
 } from "@mui/material";
 import axios from "axios";
+import { useParams, useLocation } from "react-router-dom";
 
 function OfferForm() {
   const [id, setId] = React.useState(null);
@@ -35,34 +35,55 @@ function OfferForm() {
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [blobs, setBlobs] = React.useState(null);
+  const [editMode, setEditMode] = React.useState(false);
 
-  const location = useLocation();
+  const loc = useLocation();
+
+  const getData = async (id) => {
+    const request = await axios.get(
+      `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`,
+      {}
+    );
+    const car = request.data;
+    setEditMode(true);
+    if (car) {
+      setName(car.vehicleName);
+      setGeabox(car.vehicleGearbox);
+      setDrive(car.vehicleDrive);
+      setNumberOfDoors(car.numberOfDoors);
+      setNumberOfSeats(car.numberOfSeats);
+      setBootCapacity(car.bootCapacity);
+      setLength(car.length);
+      setHeight(car.height);
+      setWidth(car.width);
+      setProductionStartYear(car.productionStartYear);
+      setProductionEndYear(car.productionEndYear);
+      setWheelBase(car.wheelBase);
+      setBackWheelTrack(car.backWheelTrack);
+      setFrontWheelTrack(car.frontWheelTrack);
+      setVehicleDescription(car.vehicleDescription);
+      setPrice(car.price);
+      setEmail(car.contactEmail);
+      setPhone(car.contactPhoneNumber);
+    }
+  };
 
   useEffect(() => {
     setClientId(localStorage.getItem("clientId"));
+    let queryOfferId = loc.search.split("=")[1];
 
-    if (location.state) {
-      setId(location.state.id);
-      setName(location.state.vehicle.name);
-      setGeabox(location.state.vehicle.gearbox);
-      setDrive(location.state.vehicle.drive);
-      setNumberOfDoors(location.state.vehicle.numberOfDoors);
-      setNumberOfSeats(location.state.vehicle.numberOfSeats);
-      setBootCapacity(location.state.vehicle.bootCapacity);
-      setLength(location.state.vehicle.length);
-      setHeight(location.state.vehicle.height);
-      setWidth(location.state.vehicle.width);
-      setProductionStartYear(location.state.vehicle.productionStartYear);
-      setProductionEndYear(location.state.vehicle.productionEndYear);
-      setWheelBase(location.state.vehicle.wheelBase);
-      setBackWheelTrack(location.state.vehicle.backWheelTrack);
-      setFrontWheelTrack(location.state.vehicle.frontWheelTrack);
-      setVehicleDescription(location.state.vehicle.description);
+    if (queryOfferId) {
+      setId(queryOfferId);
 
-      setPrice(location.state.price);
-      setDescription(location.state.description);
-      setEmail(location.state.email);
-      setPhone(location.state.phone);
+      try {
+        getData(queryOfferId)
+          .then(() => {})
+          .catch((err) => {
+            console.error(err);
+          });
+      } catch (e) {
+        alert("Brak danych oferty");
+      }
     }
   }, []);
 
@@ -183,7 +204,7 @@ function OfferForm() {
         clientId: clientId,
       };
 
-      if (id) {
+      if (id) {        
         const request = await axios.put(
           `${import.meta.env.REACT_APP_BACKEND_URL}/Offer/${id}`,
           {
@@ -297,43 +318,51 @@ function OfferForm() {
             }}
           />
 
-          <Typography variant="h7" component="div">
-            Skrzynia biegów
-          </Typography>
+          {!editMode && (
+            <>
+              <Typography variant="h7" component="div">
+                Skrzynia biegów
+              </Typography>
 
-          <Select
-            id="gearbox"
-            value={gearbox}
-            sx={{ minWidth: 150 }}
-            onChange={(event) => {
-              setGeabox(event.target.value);
-            }}
-          >
-            <MenuItem value="select">
-              <em>Wybierz</em>
-            </MenuItem>
-            <MenuItem value="manual">manualna</MenuItem>
-            <MenuItem value="automatic">automatyczna</MenuItem>
-          </Select>
+              <Select
+                id="gearbox"
+                value={gearbox}
+                sx={{ minWidth: 150 }}
+                onChange={(event) => {
+                  setGeabox(event.target.value);
+                }}
+              >
+                <MenuItem value="select">
+                  <em>Wybierz</em>
+                </MenuItem>
+                <MenuItem value="manual">manualna</MenuItem>
+                <MenuItem value="automatic">automatyczna</MenuItem>
+              </Select>
+            </>
+          )}
 
-          <Typography variant="h7" component="div">
-            Napęd
-          </Typography>
-          <Select
-            id="drive"
-            value={drive}
-            sx={{ minWidth: 150 }}
-            onChange={(event) => {
-              setDrive(event.target.value);
-            }}
-          >
-            <MenuItem value="select">
-              <em>Wybierz</em>
-            </MenuItem>
-            <MenuItem value="awd">awd</MenuItem>
-            <MenuItem value="rwd">rwd</MenuItem>
-            <MenuItem value="fwd">fwd</MenuItem>
-          </Select>
+          {!editMode && (
+            <>
+              <Typography variant="h7" component="div">
+                Napęd
+              </Typography>
+              <Select
+                id="drive"
+                value={drive}
+                sx={{ minWidth: 150 }}
+                onChange={(event) => {
+                  setDrive(event.target.value);
+                }}
+              >
+                <MenuItem value="select">
+                  <em>Wybierz</em>
+                </MenuItem>
+                <MenuItem value="awd">awd</MenuItem>
+                <MenuItem value="rwd">rwd</MenuItem>
+                <MenuItem value="fwd">fwd</MenuItem>
+              </Select>
+            </>
+          )}
         </Grid>
         <Grid container xs={3.5} direction="column" style={{ gap: 10 }}>
           {details_column1.map((item) => (
@@ -406,28 +435,32 @@ function OfferForm() {
             }}
           />
         ))}
-        <TextField
-          label="Opis oferty"
-          type="text"
-          color="primary"
-          value={description}
-          multiline
-          rows={5}
-          placeholder="Opis"
-          onChange={(event) => {
-            setDescription(event.target.value);
-          }}
-        />
-        <Button variant="contained" component="label">
-          Upload File
-          <input
-            type="file"
-            onChange={(e) => {
-              setBlobs(e.currentTarget.files);
+        {!editMode && (
+          <TextField
+            label="Opis oferty"
+            type="text"
+            color="primary"
+            value={description}
+            multiline
+            rows={5}
+            placeholder="Opis"
+            onChange={(event) => {
+              setDescription(event.target.value);
             }}
-            hidden
           />
-        </Button>
+        )}
+        {!editMode && (
+          <Button variant="contained" component="label">
+            Upload File
+            <input
+              type="file"
+              onChange={(e) => {
+                setBlobs(e.currentTarget.files);
+              }}
+              hidden
+            />
+          </Button>
+        )}
       </Grid>
 
       <Button
